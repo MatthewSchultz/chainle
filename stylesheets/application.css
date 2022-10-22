@@ -1,19 +1,130 @@
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) { }
+*, *:before, *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  z-index: 0;
+}
 
 /* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) { }
+@media only screen and (min-width: 768px) {
+  :root {
+    --box-size: 128px;
+    --container-size: 768px;
+    --radius-factor: 6;
 
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) { }
+    --qwerty-max-cols: 10;
+    --qwerty-seperator-size: 2px;
+    --qwerty-border: 1px;
 
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) { }
-
+    --vertical-margin: calc((var(--container-size) - (var(--box-size) * 5)) / 10);
+    --total-qwerty-sep: calc(var(--qwerty-max-cols) + 1);
+    --total-qwerty-sep-space: calc(var(--qwerty-seperator-size) * var(--total-qwerty-sep));
+    --total-qwerty-key-space: calc(var(--container-size) - var(--total-qwerty-sep-space));
+    --qwerty-box-size: calc(var(--total-qwerty-key-space) / var(--qwerty-max-cols));
+    --qwerty-internal-box-size: calc(var(--qwerty-box-size) - (var(--qwerty-border) * 2));
+    --qwerty-padding: calc(var(--qwerty-internal-box-size) / 6);
+    --qwerty-font-size: calc(var(--qwerty-internal-box-size) - (var(--qwerty-padding) * 2));
+  }
+}
 
 @media (prefers-color-scheme: dark) {
-  body {
-    background-color: black;
-    color: white;
+  :root {
+    --background: black;
+    --foreground: white;
   }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+body, body * {
+  padding: 0;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.container {
+  height: 100%;
+  max-width: var(--container-size);
+  margin: 0 auto;
+}
+
+header {
+  width: 100%;
+  padding: 0 12px;
+}
+
+header h1 {
+  margin-top: 4px;
+  font-size: 48px;
+  font-weight: bold;
+  letter-spacing: 4px;
+}
+
+main {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+main .row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin: var(--vertical-margin) 0px;
+}
+
+main .row .box {
+  width: var(--box-size);
+  height: var(--box-size);
+  border: 2px solid white;
+  border-radius: calc(var(--box-size) / var(--radius-factor));
+  margin: 0 12px;
+  display: inline;
+}
+
+footer {
+  margin-top: 8px;
+}
+
+footer .row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+footer a.key {
+  border: 1px solid var(--foreground);
+  border-radius: calc(var(--qwerty-box-size) / var(--radius-factor));
+  display: block;
+  margin: var(--qwerty-seperator-size);
+  height: var(--qwerty-box-size);
+  color: var(--foreground);
+  text-decoration: none;
+  text-align: center;
+  vertical-align: middle;
+  padding: var(--qwerty-padding);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: var(--qwerty-font-size);
+  font-size: var(--qwerty-font-size);
+  font-size-adjust: 1.0;
+  text-transform: uppercase;
+}
+
+footer a.key span {
+  display: block;
+
+}
+
+footer a.letter {
+  width: var(--qwerty-box-size);
+}
+
+footer a.function {
+  flex-grow: 1;
 }
