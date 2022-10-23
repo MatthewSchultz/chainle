@@ -5,33 +5,52 @@
   z-index: 0;
 }
 
+:root {
+  --background: white;
+  --foreground: black;
+  --container-size: 400px;
+  /* Use 1/10 of the horizontal for spacing */
+  --main-section-spacing-factor: 10;
+}
+
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
   :root {
-    --box-size: 128px;
     --container-size: 768px;
-    --radius-factor: 6;
-
-    --qwerty-max-cols: 10;
-    --qwerty-seperator-size: 2px;
-    --qwerty-border: 1px;
-
-    --vertical-margin: calc((var(--container-size) - (var(--box-size) * 5)) / 10);
-    --total-qwerty-sep: calc(var(--qwerty-max-cols) + 1);
-    --total-qwerty-sep-space: calc(var(--qwerty-seperator-size) * var(--total-qwerty-sep));
-    --total-qwerty-key-space: calc(var(--container-size) - var(--total-qwerty-sep-space));
-    --qwerty-box-size: calc(var(--total-qwerty-key-space) / var(--qwerty-max-cols));
-    --qwerty-internal-box-size: calc(var(--qwerty-box-size) - (var(--qwerty-border) * 2));
-    --qwerty-padding: calc(var(--qwerty-internal-box-size) / 6);
-    --qwerty-font-size: calc(var(--qwerty-internal-box-size) - (var(--qwerty-padding) * 2));
+    /* Use 1/6 of the horizontal for spacing */
+    --main-section-spacing-factor: 6;
   }
 }
 
+/* Dark mode screens - system preference */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: black;
     --foreground: white;
   }
+}
+
+:root {
+  --game-columns: 5;
+  --seperator: 2px;
+  --box-size: 128px;
+  --radius-factor: 6;
+
+  --qwerty-max-cols: 10;
+  --qwerty-seperator-size: 2px;
+  --qwerty-border: 1px;
+
+  --main-box-margin: calc(var(--container-size) / calc(var(--main-section-spacing-factor) * var(--game-columns) * 2));
+  --main-box-margin-total-size: calc(var(--main-box-margin) * var(--game-columns) * 2);
+  --main-box-size: calc(calc(var(--container-size) - var(--main-box-margin-total-size)) / var(--game-columns));
+
+  --total-qwerty-sep: calc(var(--qwerty-max-cols) + 1);
+  --total-qwerty-sep-space: calc(var(--qwerty-seperator-size) * var(--total-qwerty-sep));
+  --total-qwerty-key-space: calc(var(--container-size) - var(--total-qwerty-sep-space));
+  --qwerty-box-size: calc(var(--total-qwerty-key-space) / var(--qwerty-max-cols));
+  --qwerty-internal-box-size: calc(var(--qwerty-box-size) - (var(--qwerty-border) * 2));
+  --qwerty-padding: calc(var(--qwerty-internal-box-size) / 6);
+  --qwerty-font-size: calc(var(--qwerty-internal-box-size) - (var(--qwerty-padding) * 2));
 }
 
 body {
@@ -74,16 +93,15 @@ main .row {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  margin: var(--vertical-margin) 0px;
 }
 
 main .row .box {
-  width: var(--box-size);
-  height: var(--box-size);
+  width: var(--main-box-size);
+  height: var(--main-box-size);
   border: 2px solid white;
   border-radius: calc(var(--box-size) / var(--radius-factor));
-  margin: 0 12px;
-  display: inline;
+  margin: var(--main-box-margin);
+  /* display: inline; */
 }
 
 footer {
