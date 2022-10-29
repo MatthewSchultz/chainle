@@ -6,11 +6,18 @@
 }
 
 :root {
-  --background: white;
-  --foreground: black;
   --container-size: 400px;
   /* Use 1/10 of the horizontal for spacing */
   --spacing-factor: 10;
+
+  /* Colors, mode independent: */
+  --light: #fffdfa;
+  --dark: #060606;
+
+  /* Details: */
+  --seperator: 2px;
+  --radius-factor: 6;
+  --header-size: 48px;
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
@@ -22,50 +29,43 @@
   }
 }
 
-/* Dark mode screens - system preference */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: black;
-    --foreground: white;
-  }
-}
-
-:root {
-  --game-columns: 5;
-  --seperator: 2px;
-  --radius-factor: 6;
-
-  --main-box-border: 2px;
-
-  --qwerty-max-cols: 10;
-  --qwerty-seperator-size: 2px;
-  --qwerty-border: 1px;
-
-  --main-box-margin: calc(var(--container-size) / calc(var(--spacing-factor) * var(--game-columns) * 2));
-  --main-box-margin-total-size: calc(var(--main-box-margin) * var(--game-columns) * 2);
-  --main-box-size: calc(calc(var(--container-size) - var(--main-box-margin-total-size)) / var(--game-columns));
-  --main-box-internal-size: calc(var(--main-box-size) - calc(var(--main-box-border) *2));
-  --main-box-padding: calc(var(--main-box-internal-size) / var(--spacing-factor));
-  --main-box-font-size: calc(var(--main-box-internal-size) - (var(--main-box-padding) * 2));
-
-  --total-qwerty-sep: calc(var(--qwerty-max-cols) + 1);
-  --total-qwerty-sep-space: calc(var(--qwerty-seperator-size) * var(--total-qwerty-sep));
-  --total-qwerty-key-space: calc(var(--container-size) - var(--total-qwerty-sep-space));
-  --qwerty-box-size: calc(var(--total-qwerty-key-space) / var(--qwerty-max-cols));
-  --qwerty-internal-box-size: calc(var(--qwerty-box-size) - (var(--qwerty-border) * 2));
-  --qwerty-padding: calc(var(--qwerty-internal-box-size) / var(--spacing-factor));
-  --qwerty-font-size: calc(var(--qwerty-internal-box-size) - (var(--qwerty-padding) * 2));
-}
-
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--light);
 }
 
 body, body * {
   padding: 0;
   margin: 0;
   font-family: 'Roboto', sans-serif;
+  color: var(--dark);
+  border-width: 0px;
+  border-color: var(--dark);
+  border-style: solid;
+}
+
+body button {
+  background-color: var(--light);
+}
+
+body button:active {
+  background-color: var(--dark);
+}
+
+body.dark {
+  background-color: var(--dark);
+}
+
+body.dark, body.dark * {
+  color: var(--light);
+  border-color: var(--light);
+}
+
+body.dark button, body.dark dialog {
+  background-color: var(--dark);
+}
+
+body.dark button:active {
+  background-color: var(--light);
 }
 
 .container {
@@ -74,104 +74,63 @@ body, body * {
   margin: 0 auto;
 }
 
-.button {
-  padding: var(--qwerty-padding);
+dialog {
+  background-color: var(--light);
+  color: var(--dark);
+  border-color: var(--dark);
+  border-width: 2px;
+  margin: auto;
+  width: calc(var(--container-size) * 0.85);
+  padding: 20px;
+  border-radius: 20px;
+}
+
+body.dark dialog {
+  background-color: var(--dark);
+  color: var(--dark);
+}
+
+dialog::backdrop {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.2),
+    rgba(0, 0, 0, 0.2) 1px,
+    rgba(0, 0, 0, 0.3) 1px,
+    rgba(0, 0, 0, 0.3) 20px
+  );
+  backdrop-filter: blur(3px);
 }
 
 header {
+  margin-top: 4px;
   width: 100%;
-  padding: 0 12px;
+  padding: 0 var(--main-box-margin);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 header h1 {
-  margin-top: 4px;
-  font-size: 48px;
+  margin: 0;
+  padding: 0;
   font-weight: bold;
   letter-spacing: 4px;
+  line-height: var(--header-size);
+  font-size: var(--header-size);
 }
 
-main {
-  width: 100%;
-
-  display: flex;
-  flex-direction: column;
-}
-
-main .row {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-
-main .row .box {
-  width: var(--main-box-size);
-  height: var(--main-box-size);
-  border: var(--main-box-border) solid var(--foreground);
-  border-radius: calc(var(--main-box-size) / var(--radius-factor));
-  margin: var(--main-box-margin);
-  color: var(--foreground);
-  background-color: var(--background);
-  text-align: center;
-  padding: var(--main-box-padding);
-  font-size: var(--main-box-font-size);
-  line-height: var(--main-box-font-size);
-  text-transform: uppercase;
-}
-
-footer {
-  margin-top: 8px;
-}
-
-footer .row {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-footer a.key {
-  border: 1px solid var(--foreground);
-  border-radius: calc(var(--qwerty-box-size) / var(--radius-factor));
-  display: block;
-  margin: var(--qwerty-seperator-size);
-  height: var(--qwerty-box-size);
-  color: var(--foreground);
-  text-decoration: none;
-  text-align: center;
-  padding: var(--qwerty-padding);
-  line-height: var(--qwerty-font-size);
-  font-size: var(--qwerty-font-size);
-  text-transform: uppercase;
-}
-
-footer a.key:active {
-  animation: pulse 0.5s ease-in-out 0s 1;
-}
-
-footer a.key span {
-  display: block;
-}
-
-footer a.letter {
-  width: var(--qwerty-box-size);
-}
-
-footer a.function {
-  flex-grow: 1;
-}
-
-.correct {
-  background-color: #538d4e !important;
-  color: white !important;
-}
-
-.included {
-  background-color: #b59f3b !important;
-  color: white !important;
-}
-
-.excluded {
-  background-color: #3a3a3c !important;
-  color: white !important;
+header button {
+  --header-button-margin: 2px;
+  --header-button-height: calc(var(--header-size) - calc(var(--header-button-margin) * 2));
+  --header-button-internal-size: calc(var(--header-button-height) - 2px);
+  --header-button-padding-size: calc(var(--header-button-internal-size) / var(--spacing-factor));
+  height: var(--header-button-height);
+  margin: var(--header-button-margin) 0;
+  border-width: 1px;
+  padding: var(--header-button-padding-size);
+  line-height: calc(var(--header-button-internal-size) - calc(var(--header-button-padding-size) * 2));
+  font-size: calc(var(--header-button-internal-size) - calc(var(--header-button-padding-size) * 2));
+  border-radius: calc(var(--header-button-height) / var(--radius-factor));
 }
 
 .animate-pulse {
